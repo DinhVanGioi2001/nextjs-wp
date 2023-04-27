@@ -1,35 +1,35 @@
-import {Post} from "@/interfaces/posts.interface";
+import { Post } from "@/interfaces/posts.interface";
 
-const API_WP='http://localhost/wp-graphql/index.php?graphql';
+const API_WP = "http://localhost/wordpress/index.php?graphql";
 
-export async function fetchApi(query: string, {variable}:{variable?: string} = {}) {
-    const headers = {
-        'Content-Type': 'application/json'
-    };
-    const body = {
-        query,
-        variable
-    };
-    const res = await fetch(
-        API_WP, 
-        {
-            method: "POST",
-            headers,
-            body: JSON.stringify({
-                query,
-                variable
-            })
-        }
-    );
+export async function fetchApi(
+  query: string,
+  { variable }: { variable?: string } = {}
+) {
+  const headers = {
+    "Content-Type": "application/json",
+  };
+  const body = {
+    query,
+    variable,
+  };
+  const res = await fetch(API_WP, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      query,
+      variable,
+    }),
+  });
 
-    const json = await res.json();
-    return json.data;
+  const json = await res.json();
+  return json.data;
 }
 
-export function getAllPostSlugs() {
-    const data = fetchApi(`
+export async function getAllPostSlugs(): Promise<Post[]> {
+  const data = await fetchApi(`
     {
-        posts(first:1 where: {orderby: {field: DATE, order: DESC}}) {
+        posts(first:10 where: {orderby: {field: DATE, order: DESC}}) {
             edges {
                 node {
                     slug	
@@ -38,22 +38,23 @@ export function getAllPostSlugs() {
         }
     }
     `);
-    return data;
+  return data.posts.edges.map((edge: any) => edge.node);
 }
 
 export async function getAllPostHome(): Promise<Post[]> {
-    const data = await fetchApi(`
+  const data = await fetchApi(`
       {
-        posts(first:1 where: {orderby: {field: DATE, order: DESC}}) {
+        posts(first:10 where: {orderby: {field: DATE, order: DESC}}) {
           edges {
             node {
               slug
               title
+              content(format: RENDERED)
               date
             }
           }
         }
       }
     `);
-    return data.posts.edges.map((edge: any) => edge.node);
+  return data.posts.edges.map((edge: any) => edge.node);
 }
