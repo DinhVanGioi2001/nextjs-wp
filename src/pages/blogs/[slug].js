@@ -1,20 +1,41 @@
-import { getAllPostSlugs } from '../../../lib/api';
+import { styled } from '@mui/material';
+import { getAllPostSlugs, getPostAndMorePosts } from '../../../lib/api';
 
-export default function Blog() {
+export default function Blog({ blogs }) {
+
     return (
-        <div>
-            hello
-        </div>
+        <Main>
+            <div>
+                <h1>{blogs.title}</h1>
+            </div>
+            <div dangerouslySetInnerHTML={{ __html: blogs.content }} />
+        </Main>
     )
 }
 
-// export async function getStaticPaths() {
-//     const posts = await getAllPostSlugs();
 
-//     const paths = posts.map((post) => ({
-//         params: { slug: post.slug },
-//     }))
-//     const { params } = paths;
-//     console.log(params)
-//     return { paths, fallback: false }
-// }
+export async function getStaticProps({ params }) {
+    const data = await getPostAndMorePosts(params.slug);
+    return {
+        props: { blogs: data }
+    }
+}
+
+export async function getStaticPaths() {
+    const posts = await getAllPostSlugs();
+
+    const paths = posts.map((post) => ({
+        params: { slug: post.slug },
+    }))
+    return { paths, fallback: false }
+}
+
+const Main = styled("div")`
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 15px;
+  .post-div {
+    margin-top: 4rem;
+  }
+`;
