@@ -12,12 +12,8 @@ const nextConfig = {
         destination: '/posts/:slug',
       },
       {
-        source: "/vi/demo",
-        destination: "/listpost/list",
-      },
-      {
-        source: "/en/demo",
-        destination: "/listpost/list",
+        source: "/vi/:slug",
+        destination: "/posts/:slug",
       },
     ]
   },

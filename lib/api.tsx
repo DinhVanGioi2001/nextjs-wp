@@ -5,7 +5,7 @@ const API_WP = "https://cmstest.starack.net/graphql";
 export async function fetchApi(
   query: string,
   // { variable }: { variable?: object } = {}
-  { variables }: { variables?: { id: string; idType: string } } = {}
+  { variables }: { variables?: any } = {}
 ) {
   const headers = {
     "Content-Type": "application/json",
@@ -60,6 +60,27 @@ export async function getAllPostHome(): Promise<Post[]> {
   return data.posts.edges.map((edge: any) => edge.node);
 }
 
+export async function getAllPostLanguage(lang: string) {
+  const data = await fetchApi(
+    `
+  query MyEnglishPosts($language: LanguageCodeFilterEnum = EN) {
+    posts(first: 10, where: {language: $language}) {
+      nodes {
+        id
+        slug
+        title
+      }
+    }
+  }`,
+    {
+      variables: {
+        language: lang,
+      },
+    }
+  );
+  return data?.posts.nodes;
+}
+
 export async function getAllPosts() {
   const data = await fetchApi(`
   {
@@ -91,15 +112,29 @@ export async function getAllPosts() {
 
 export async function getPostAndMorePosts(slug_require: string) {
   const data = await fetchApi(
-    `
-    query SinglePost($id: ID!, $idType: PostIdType!) {
-      post(id: $id, idType: $idType) {
+    `query MyEnglishPosts($id: ID = "", $idType: PostIdType = SLUG) {
+      post(idType: $idType, id: $id) {
         title
         date
         content
         slug
+        excerpt
+        language {
+          name
+          locale
+          slug
+        }
+        translations {
+          slug
+          language {
+            code
+            slug
+            locale
+            name
+          }
+        }
       }
-  }`,
+    }`,
     {
       variables: {
         id: slug_require,

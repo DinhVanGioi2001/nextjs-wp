@@ -1,14 +1,24 @@
 import { styled } from "@mui/material";
 import { getAllPostSlugs, getPostAndMorePosts } from "../../../lib/api";
+import SEOHead from "@/components/seohead";
 
 export default function Blog({ blogs }: { blogs: any }) {
   return (
-    <Main>
-      <div>
-        <h1>{blogs.title}</h1>
-      </div>
-      <div dangerouslySetInnerHTML={{ __html: blogs.content }} />
-    </Main>
+    <>
+      <SEOHead
+        slugCurrent={blogs.slug}
+        title={blogs.title}
+        languageCurent={blogs.language}
+        description={blogs.excerpt}
+        translations={blogs.translations}
+      />
+      <Main>
+        <div>
+          <h1>{blogs.title}</h1>
+        </div>
+        <div dangerouslySetInnerHTML={{ __html: blogs.content }} />
+      </Main>
+    </>
   );
 }
 
