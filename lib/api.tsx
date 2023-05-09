@@ -1,6 +1,6 @@
 import { Post } from "@/interfaces/posts.interface";
 
-const API_WP = "http://localhost/wp-graphql/index.php?graphql";
+const API_WP = "https://cmstest.starack.net/graphql";
 
 export async function fetchApi(
   query: string,

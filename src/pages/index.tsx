@@ -1,7 +1,7 @@
 import { Post } from "@/interfaces/posts.interface";
 import { GetStaticProps } from "next";
 import { getAllPostHome } from "../../lib/api";
-import { CardActionArea, CardContent, Grid, Typography } from "@mui/material";
+import { Card, CardContent, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import Link from "next/link";
 
@@ -9,40 +9,32 @@ interface HomeProps {
   posts: Post[];
 }
 
-export default function Home({ posts }: HomeProps) {
+export default function Home({ posts }: { posts: any }) {
   return (
-    <>
-      <Main>
-        <div>
-          <h1>Pte-magic Blog</h1>
-          <p>Blog example</p>
-        </div>
-        <div>
-          <h2>Blog</h2>
-          <Grid container spacing={2}>
-            {posts.map((post) => (
-              <Grid item xs={3} md={2}>
-                <CardActionArea
-                  style={{ background: "#999999", borderRadius: "10px" }}
-                  key={post.slug}
-                >
-                  <CardActionArea sx={{ maxWidth: 345, minHeight: 200 }}>
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
-                        {post.title}
-                      </Typography>
-                      <Link href={`/blogs/` + post.slug} passHref>
-                        {post.title}
-                      </Link>
-                    </CardContent>
-                  </CardActionArea>
-                </CardActionArea>
-              </Grid>
-            ))}
-          </Grid>
-        </div>
-      </Main>
-    </>
+    <div>
+      {posts.map((post: any) => (
+        <Card key={post.slug}>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              {post.title}
+            </Typography>
+            <Link href={`/${post.slug}`} passHref>
+              Read More
+            </Link>
+          </CardContent>
+        </Card>
+      ))}
+      <Card key="dmo">
+        <CardContent>
+          <Link href={`/en/demo`} passHref>
+            EN
+          </Link>
+        </CardContent>
+        <CardContent>
+          <Link href="/vi/demo">Go to demo page</Link>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 
