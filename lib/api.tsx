@@ -32,10 +32,11 @@ export async function fetchApi(
 export async function getAllPostSlugs(): Promise<Post[]> {
   const data = await fetchApi(`
     {
-        posts(first:10 where: {orderby: {field: DATE, order: DESC}}) {
+        posts(first:1000 where: {orderby: {field: DATE, order: DESC}}) {
             edges {
                 node {
-                    slug	
+                    slug
+                    date	
                 }
             }
         }
