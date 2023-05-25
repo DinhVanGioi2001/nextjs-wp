@@ -6,7 +6,12 @@ export default function SeoHead({
   excerpt,
   translations,
 }: any) {
-  const URL = "https://nextjs-wp-xi.vercel.app";
+  const origin =
+    typeof window !== "undefined" && window.location.origin
+      ? window.location.origin
+      : "https://ptemagic.com";
+
+  const URL = `${origin}`;
   function getTranslatedPath(languageCurent: any, slugCurrent: any) {
     const lang = languageCurent?.slug;
     if (lang === "en") {
