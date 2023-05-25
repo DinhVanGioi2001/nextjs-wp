@@ -1,24 +1,19 @@
 import Head from "next/head";
 
-export default function SEOHead({
-  title,
+export default function SeoHead({
   languageCurent,
   slugCurrent,
   excerpt,
   translations,
 }: any) {
-  const origin =
-    typeof window !== "undefined" && window.location.origin
-      ? window.location.origin
-      : "";
-
-  const URL = `${origin}`;
+  const URL = "https://nextjs-wp-xi.vercel.app";
   function getTranslatedPath(languageCurent: any, slugCurrent: any) {
     const lang = languageCurent?.slug;
     if (lang === "en") {
       return slugCurrent;
     }
-    return `${lang}/${slugCurrent}`;
+    // return `${lang}/${slugCurrent}`;
+    return `${slugCurrent}`;
   }
 
   const currentUrl = `${URL}/${getTranslatedPath(languageCurent, slugCurrent)}`;
@@ -27,7 +22,8 @@ export default function SEOHead({
     if (lang !== "en")
       return {
         hrefLang: lang,
-        href: `${URL}/${lang}/${translation.slug}`,
+        // href: `${URL}/${lang}/${translation.slug}`,
+        href: `${URL}/${translation.slug}`,
       };
     return {
       hrefLang: lang,
@@ -35,10 +31,14 @@ export default function SEOHead({
     };
   });
 
+  if (excerpt) {
+    var strippedHtml = excerpt.replace(/<[^>]+>/g, "");
+  }
+
   return (
     <Head>
-      <title>{title}</title>
-      <meta name="description" content={excerpt} />
+      <html lang="vi" />
+      <meta name="description" content={strippedHtml} />
       {alternateUrls?.map((url: any) => (
         <link
           rel="alternate"
